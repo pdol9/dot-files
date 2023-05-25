@@ -1,90 +1,146 @@
-" Disable compatibility with vi which can cause unexpected issues.
-set nocompatible              " be iMproved, required
-filetype off                  " required
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" Disable compatibility with vi which can cause unexpected issues. 
+set nocompatible
+set smartindent
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+set number relativenumber				" Display line numbers
+set clipboard=unnamedplus				" Copy/paste between vim and other programs.
+syntax enable
 
-Plugin 'frazrepo/vim-rainbow'
-Plugin 'https://github.com/vim-syntastic/syntastic.git'
+" remove highlight matches
+nnoremap <leader><space> :nohlsearch<CR>
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
+" visual space indicators
+"set list
+"set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬,precedes:«,extends:»
+"map <F2> :set invlist<CR>
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
+" toggle on non-printable-chars
+map <F2> :set invlist<CR>
+set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬
 "
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+" Do not let cursor scroll below or above N number of lines when scrolling.
+set scrolloff=999
 
+" Show partial command you type in the last line of the screen.
+set showcmd
 
-" CUSTOM SETTINGS
-set number
-set shiftwidth=4
-set tabstop=4
+" search highlighting
+set hlsearch
 
-" Enable type file detection. Vim will be able to try to detect the type of file in use.
-"filetype on
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Remap Keys
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Enable plugins and load plugin for the detected file type.
-"filetype plugin on
+" Type ii to exit insert mode
+inoremap ii <Esc>
+"inoremap <C-j> <Esc>
 
-" Load an indent file for the detected file type.
-"filetype indent on
+" Press the space bar to type the : character in command mode.
+nnoremap <space> :
 
-" Turn syntax highlighting on.
-"syntax on
+" Pressing the letter O/o will open a new line below/above the current one.
+nnoremap o o<esc>
+nnoremap O O<esc>
 
-" Highlight cursor line underneath the cursor horizontally.
-set cursorline
+" Yank from cursor to the end of line.
+nnoremap Y y$
 
-" Highlight cursor line underneath the cursor vertically.
-"set cursorcolumn
+" --------- testing -------------
+" Map <C-a> to insert "Hello!" in Normal mode
+nnoremap <C-a> iHello!<Esc>
 
-" Wildmenu will ignore files with these extensions.
-set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+" Map <C-a> to insert "Hello!" in Command-line mode
+cnoremap <C-a> <Esc>iHello!<CR>
 
-" disable system clipboard
-set clipboard=unnamedplus
+" Define status line colors for different modes
+set laststatus=2
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ %{get(b:,'gitsigns_status','')}\ [LINE=%l/%L]\ [COL=%c]\ [%p%%]\ %P
+highlight Normal guibg=black guifg=white
+highlight Command guibg=red guifg=white
 
-" Remap ESC to ii
-:imap ii <Esc>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set expandtab
+set autoindent
+set tabstop=2
+set shiftwidth=2
 
-" Change 2 split windows from vert to horiz or horiz to vert
-map <Leader>th <C-w>t<C-w>H
-map <Leader>tk <C-w>t<C-w>K
+" apply the indentation to certain languages using tabs instead of space
+autocmd FileType c,cpp,asm,as,s  setlocal noexpandtab
+autocmd FileType c,cpp,asm,as,s  setlocal shiftwidth=4
 
-" run python script with F9 in normal mode
-autocmd FileType python map <buffer> <F9> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
-" leave insert mode first
-autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+" set syntax highlighting
+autocmd BufRead,BufNewFile *.s set filetype=asm
+
+" Enable auto completion menu after pressing TAB.
+set wildmenu
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Splits and Tabbed Files
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" You can split the window in Vim by typing :split or :vsplit.
+" Navigate the split view easier by pressing CTRL+j, CTRL+k, CTRL+h, or CTRL+l.
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+" Resize split windows using arrow keys by pressing:
+" CTRL+UP, CTRL+DOWN, CTRL+LEFT, or CTRL+RIGHT.
+noremap <c-up> <c-w>+
+noremap <c-down> <c-w>-
+noremap <c-left> <c-w>>
+noremap <c-right> <c-w><
+
+" Map the F5 key to run a Python script inside Vim.
+nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
+
+call plug#begin()
+" List your plugins here
+Plug 'preservim/nerdtree'
+Plug 'dylanaraps/wal.vim'
+Plug 'ghifarit53/tokyonight-vim'
+call plug#end()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colors schemes
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax on
+" colorscheme wal
+" colorscheme murphy
+
+" set following theme as default
+"set termguicolors
+"let g:tokyonight_style = 'night' " available: night, storm
+"let g:tokyonight_enable_italic = 1
+"colorscheme tokyonight
+
+" set zenburn
+colors zenburn
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vim-autosave
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Save on lost focus/exit
+":set autowrite                 " enable if needed
+autocmd FocusLost * silent! w
+" to save at exit -> VimLeave
+
+" Save once per minute if there are changes
+" let g:autosave_seconds = 60
+" au BufRead,BufNewFile * let b:start_time=localtime()
+" au CursorHold * silent! call UpdateFile()
+" function! UpdateFile()
+"   if ((localtime() - b:start_time) >= g:autosave_seconds)
+"     update
+"     let b:start_time=localtime()
+"   endif
+" endfunction
+" au BufWritePre * let b:start_time=localtime()
 
