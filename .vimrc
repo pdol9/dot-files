@@ -49,12 +49,8 @@ nnoremap O O<esc>
 " Yank from cursor to the end of line.
 nnoremap Y y$
 
-" --------- testing -------------
-" Map <C-a> to insert "Hello!" in Normal mode
-nnoremap <C-a> iHello!<Esc>
-
-" Map <C-a> to insert "Hello!" in Command-line mode
-cnoremap <C-a> <Esc>iHello!<CR>
+" Map <C-a> to open "embedded terminal" in Normal mode
+nnoremap <C-a> :bel term<Esc>
 
 " Define status line colors for different modes
 set laststatus=2
@@ -72,7 +68,7 @@ set shiftwidth=2
 
 " apply the indentation to certain languages using tabs instead of space
 autocmd FileType c,cpp,asm,as,s  setlocal noexpandtab
-autocmd FileType c,cpp,asm,as,s  setlocal shiftwidth=4
+autocmd FileType c,cpp,asm,as,s  setlocal shiftwidth=2
 
 " set syntax highlighting
 autocmd BufRead,BufNewFile *.s set filetype=asm
@@ -106,6 +102,7 @@ call plug#begin()
 Plug 'preservim/nerdtree'
 Plug 'dylanaraps/wal.vim'
 Plug 'ghifarit53/tokyonight-vim'
+Plug 'dense-analysis/ale'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
