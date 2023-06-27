@@ -2,55 +2,32 @@
 " => General Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Disable compatibility with vi which can cause unexpected issues. 
 set nocompatible
-set smartindent
-
-set number relativenumber				" Display line numbers
-set clipboard=unnamedplus				" Copy/paste between vim and other programs.
-syntax enable
-
-" remove highlight matches
-nnoremap <leader><space> :nohlsearch<CR>
-
-" visual space indicators
-"set list
-"set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬,precedes:«,extends:»
-"map <F2> :set invlist<CR>
-
-" toggle on non-printable-chars
-map <F2> :set invlist<CR>
-set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬
-"
-" Do not let cursor scroll below or above N number of lines when scrolling.
+set number relativenumber
+set clipboard=unnamedplus
+set nowrap
 set scrolloff=999
-
-" Show partial command you type in the last line of the screen.
 set showcmd
-
-" search highlighting
 set hlsearch
+set wildmenu
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Remap Keys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Type ii to exit insert mode
+nnoremap <leader><space> :nohlsearch<CR>
 inoremap ii <Esc>
-"inoremap <C-j> <Esc>
-
-" Press the space bar to type the : character in command mode.
+nnoremap X y$
 nnoremap <space> :
-
-" Pressing the letter O/o will open a new line below/above the current one.
 nnoremap o o<esc>
 nnoremap O O<esc>
 
-" Yank from cursor to the end of line.
-nnoremap Y y$
+nnoremap <C-m> :bel term<Esc>
+map <silent> <F3> :NERDTreeToggle %:p:h<CR>
 
-" Map <C-a> to open "embedded terminal" in Normal mode
-nnoremap <C-a> :bel term<Esc>
+" toggle on non-printable-chars
+map <F2> :set invlist<CR>
+set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬
 
 " Define status line colors for different modes
 set laststatus=2
@@ -58,68 +35,79 @@ set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ %{get(b:,'gitsigns_status
 highlight Normal guibg=black guifg=white
 highlight Command guibg=red guifg=white
 
+" Map the F5 key to run a Python script inside Vim.
+nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+syntax enable
+set smartindent
 set expandtab
 set autoindent
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 
 " apply the indentation to certain languages using tabs instead of space
+set cindent
 autocmd FileType c,cpp,asm,as,s  setlocal noexpandtab
-autocmd FileType c,cpp,asm,as,s  setlocal shiftwidth=2
+"autocmd FileType c,cpp,asm,as,s  setlocal shiftwidth=4
 
 " set syntax highlighting
 autocmd BufRead,BufNewFile *.s set filetype=asm
-
-" Enable auto completion menu after pressing TAB.
-set wildmenu
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Splits and Tabbed Files
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" You can split the window in Vim by typing :split or :vsplit.
-" Navigate the split view easier by pressing CTRL+j, CTRL+k, CTRL+h, or CTRL+l.
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
-" Resize split windows using arrow keys by pressing:
-" CTRL+UP, CTRL+DOWN, CTRL+LEFT, or CTRL+RIGHT.
 noremap <c-up> <c-w>+
 noremap <c-down> <c-w>-
 noremap <c-left> <c-w>>
 noremap <c-right> <c-w><
 
-" Map the F5 key to run a Python script inside Vim.
-nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" List plugins 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin()
-" List your plugins here
 Plug 'preservim/nerdtree'
-Plug 'dylanaraps/wal.vim'
-Plug 'ghifarit53/tokyonight-vim'
 Plug 'dense-analysis/ale'
+Plug 'ghifarit53/tokyonight-vim'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colors schemes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-syntax on
-" colorscheme wal
-" colorscheme murphy
+
+"colorscheme wal
+"colorscheme murphy
+"colorscheme desert
+"colorscheme delek
 
 " set following theme as default
-"set termguicolors
-"let g:tokyonight_style = 'night' " available: night, storm
-"let g:tokyonight_enable_italic = 1
-"colorscheme tokyonight
+set termguicolors
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+colorscheme tokyonight
 
 " set zenburn
-colors zenburn
+"colors zenburn
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Cursor
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set cursorline
+hi CursorLine cterm=NONE ctermbg=242
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-autosave
@@ -140,4 +128,11 @@ autocmd FocusLost * silent! w
 "   endif
 " endfunction
 " au BufWritePre * let b:start_time=localtime()
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Unused settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"set autochdir
+"autocmd VimEnter * NERDTree
 
