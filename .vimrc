@@ -1,61 +1,96 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 set nocompatible
 set number relativenumber
 set clipboard=unnamedplus
-set nowrap
-set scrolloff=999
-set showcmd
+set backspace=indent,eol,start
+
+set updatetime=300
+set encoding=utf-8
+scriptencoding utf-8
+
 set hlsearch
 set wildmenu
+set wildignore=*.jpg,*.png,*.gif,*.pdf,*.pyc,*.flv,*.img
+set wildmode=list:longest
+set showcmd
+set signcolumn=no
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Remap Keys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 nnoremap <leader><space> :nohlsearch<CR>
 inoremap ii <Esc>
-nnoremap X y$
 nnoremap <space> :
-nnoremap o o<esc>
-nnoremap O O<esc>
 
-nnoremap <C-m> :bel term<Esc>
-map <silent> <F3> :NERDTreeToggle %:p:h<CR>
+inoremap 9 ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
+inoremap " ""<Left>
+
+inoremap 1 !
+inoremap 2 @
+inoremap 3 #
+inoremap 4 $
+inoremap 5 %
+inoremap 6 ^
+inoremap 7 &
+inoremap 8 *
+inoremap 0 )
+inoremap - _
+
+inoremap ! 1
+inoremap @ 2
+inoremap # 3
+inoremap $ 4
+inoremap % 5
+inoremap ^ 6
+inoremap & 7
+inoremap * 8
+inoremap ( 9
+inoremap ) 0
+inoremap _ -
 
 " toggle on non-printable-chars
-map <F2> :set invlist<CR>
 set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬
+map <F2> :set invlist<CR>
 
-" Define status line colors for different modes
-set laststatus=2
-set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ %{get(b:,'gitsigns_status','')}\ [LINE=%l/%L]\ [COL=%c]\ [%p%%]\ %P
-highlight Normal guibg=black guifg=white
-highlight Command guibg=red guifg=white
+" terminal
+nnoremap <silent> <F4> :bel term<CR>
+set autochdir
 
-" Map the F5 key to run a Python script inside Vim.
+" run python script
 nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
 
+" insert date
+nnoremap <f6> :r!date "+\%F" <Esc>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
+" => Folding
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"set foldmethod=indent
+"augroup filetype_vim
+"    autocmd!
+"    autocmd FileType vim setlocal foldmethod=marker
+"augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab, indentation
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 syntax enable
+filetype plugin indent on
 set smartindent
-set expandtab
 set autoindent
 set tabstop=4
 set shiftwidth=4
-
-" apply the indentation to certain languages using tabs instead of space
+set noexpandtab
 set cindent
-autocmd FileType c,cpp,asm,as,s  setlocal noexpandtab
-"autocmd FileType c,cpp,asm,as,s  setlocal shiftwidth=4
 
-" set syntax highlighting
-autocmd BufRead,BufNewFile *.s set filetype=asm
+" syntax highlighting
+""autocmd BufRead, BufNewFile *.s set filetype=nasm
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Splits and Tabbed Files
@@ -76,46 +111,68 @@ noremap <c-right> <c-w><
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin()
-Plug 'preservim/nerdtree'
 Plug 'dense-analysis/ale'
-Plug 'ghifarit53/tokyonight-vim'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'liquidz/vim-iced', {'for': 'clojure'}
+Plug 'guns/vim-sexp',    {'for': 'clojure'}
+"Plug 'clojure-vim/clojure.vim'
+"Plug 'preservim/nerdtree'
+"Plug 'tribela/vim-transparent'
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'ghifarit53/tokyonight-vim'
 call plug#end()
 
+" iced-vim
+set runtimepath-=$HOME/.vim
+set runtimepath-=$HOME/.vim/after
+set packpath=/tmp/vim-iced-test
+let g:iced_enable_default_key_mappings = v:true
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Colors schemes
+" Colorschemes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"colorscheme wal
+" default schemes
 "colorscheme murphy
 "colorscheme desert
 "colorscheme delek
+"colorscheme darkblue
+"colorscheme default
+"colorscheme blue
+"colorscheme elflord
+"colorscheme koehler
+"colorscheme ron
+"colorscheme pablo
+"colorscheme slate
+"colorscheme torte
+"colorscheme industry
 
-" set following theme as default
-set termguicolors
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 1
-colorscheme tokyonight
+"colorscheme wal
+"colorscheme zenburn
 
-" set zenburn
-"colors zenburn
+"" tokio night theme
+"set termguicolors
+"let g:tokyonight_style = 'night' " available: night, storm
+"let g:tokyonight_enable_italic = 1
+"colorscheme tokyonight
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Cursor
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:autocmd BufEnter,FileType *
+\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
+\   elseif &ft ==? 'clj' | colorscheme industry |
+\   else | colorscheme delek |
+\   endif
 
-set cursorline
-hi CursorLine cterm=NONE ctermbg=242
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+autocmd VimEnter *.clj :colo industry
+"autocmd FileType clj colorscheme industry
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-autosave
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Save on lost focus/exit
-":set autowrite                 " enable if needed
+
 autocmd FocusLost * silent! w
-" to save at exit -> VimLeave
+autocmd FileType clj set autowrite
+"set autowrite							" enable if needed
+"autocmd VimLeave						" saving at exiting
 
 " Save once per minute if there are changes
 " let g:autosave_seconds = 60
@@ -133,6 +190,7 @@ autocmd FocusLost * silent! w
 " Unused settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"set autochdir
 "autocmd VimEnter * NERDTree
+"inoremap <C-a>{ {<Cr><Cr>}<Up>
+"map <silent> <F3> :NERDTreeToggle %:p:h<CR>
 
