@@ -70,11 +70,22 @@ nnoremap <f6> :r!date "+\%F" <Esc>
 " => Folding
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"set foldmethod=indent
-"augroup filetype_vim
-"    autocmd!
-"    autocmd FileType vim setlocal foldmethod=marker
-"augroup END
+set foldmethod=syntax
+set foldlevel=2
+nnoremap ' zR
+nnoremap " zM
+nnoremap <leader><leader> za
+
+" Define a function to set the custom highlight
+function! SetCustomHighlight()
+    highlight Folded ctermbg=black ctermfg=cyan guibg=#000000 guifg=#ffffff
+endfunction
+
+" Call the function when the ColorScheme event is triggered
+augroup SetCustomHighlightGroup
+    autocmd!
+    autocmd ColorScheme * call SetCustomHighlight()
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab, indentation
@@ -88,9 +99,6 @@ set tabstop=4
 set shiftwidth=4
 set noexpandtab
 set cindent
-
-" syntax highlighting
-""autocmd BufRead, BufNewFile *.s set filetype=nasm
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Splits and Tabbed Files
@@ -111,10 +119,14 @@ noremap <c-right> <c-w><
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin()
+Plug 'flazz/vim-colorschemes'
 Plug 'dense-analysis/ale'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'liquidz/vim-iced', {'for': 'clojure'}
 Plug 'guns/vim-sexp',    {'for': 'clojure'}
+Plug 'slint-ui/vim-slint'
+Plug 'rust-lang/rust.vim'
+Plug 'mhinz/vim-startify'
 "Plug 'clojure-vim/clojure.vim'
 "Plug 'preservim/nerdtree'
 "Plug 'tribela/vim-transparent'
@@ -132,38 +144,18 @@ let g:iced_enable_default_key_mappings = v:true
 " Colorschemes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" default schemes
-"colorscheme murphy
-"colorscheme desert
-"colorscheme delek
-"colorscheme darkblue
-"colorscheme default
-"colorscheme blue
-"colorscheme elflord
-"colorscheme koehler
-"colorscheme ron
-"colorscheme pablo
-"colorscheme slate
-"colorscheme torte
-"colorscheme industry
+colorscheme molokai
+"autocmd VimEnter * nested
+"\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
+"\   elseif &ft ==? 'clj' | colorscheme industry |
+"\   elseif &ft ==# 'rust' | colorscheme ron |
+"\   else | colorscheme delek |
+"\   endif
+"
+"autocmd VimEnter *.clj :colo industry
 
-"colorscheme wal
-"colorscheme zenburn
-
-"" tokio night theme
-"set termguicolors
-"let g:tokyonight_style = 'night' " available: night, storm
-"let g:tokyonight_enable_italic = 1
-"colorscheme tokyonight
-
-:autocmd BufEnter,FileType *
-\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
-\   elseif &ft ==? 'clj' | colorscheme industry |
-\   else | colorscheme delek |
-\   endif
-
-autocmd VimEnter *.clj :colo industry
-"autocmd FileType clj colorscheme industry
+" syntax highlighting
+autocmd BufEnter *.slint :setlocal filetype=slint
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-autosave
@@ -171,6 +163,11 @@ autocmd VimEnter *.clj :colo industry
 
 autocmd FocusLost * silent! w
 autocmd FileType clj set autowrite
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Unused settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 "set autowrite							" enable if needed
 "autocmd VimLeave						" saving at exiting
 
@@ -186,11 +183,13 @@ autocmd FileType clj set autowrite
 " endfunction
 " au BufWritePre * let b:start_time=localtime()
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Unused settings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 "autocmd VimEnter * NERDTree
 "inoremap <C-a>{ {<Cr><Cr>}<Up>
 "map <silent> <F3> :NERDTreeToggle %:p:h<CR>
+"autocmd FileType clj colorscheme industry
 
+" tokio night theme
+"set termguicolors
+"let g:tokyonight_style = 'night' " available: night, storm
+"let g:tokyonight_enable_italic = 1
+"colorscheme tokyonight
