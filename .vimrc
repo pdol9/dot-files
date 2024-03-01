@@ -1,4 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible
@@ -16,41 +16,49 @@ set wildignore=*.jpg,*.png,*.gif,*.pdf,*.pyc,*.flv,*.img
 set wildmode=list:longest
 set showcmd
 set signcolumn=no
+set path+=../inc,../include,../tests,./src,./srcs
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Remap Keys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <leader><space> :nohlsearch<CR>
-inoremap ii <Esc>
+inoremap __ <Esc>
 nnoremap <space> :
 
-inoremap 9 ()<Left>
-inoremap [ []<Left>
-inoremap { {}<Left>
-inoremap " ""<Left>
+let g:mappings_enabled = 1
 
-inoremap 1 !
-inoremap 2 @
-inoremap 3 #
-inoremap 4 $
-inoremap 5 %
-inoremap 6 ^
-inoremap 7 &
-inoremap 8 *
-inoremap 0 )
-inoremap - _
+function! ToggleMappings()
+    if g:mappings_enabled
+        imap 1 !
+        imap 2 @
+        imap 3 #
+        imap 4 $
+        imap 5 %
+        imap 6 ^
+        imap 7 &
+        imap 8 *
+        imap 9 (
+        imap 0 )
+        imap - _
+        imap = +
+        let g:mappings_enabled = 0
+    else
+        iunmap 1
+        iunmap 2
+        iunmap 3
+        iunmap 4
+        iunmap 5
+        iunmap 6
+        iunmap 7
+        iunmap 8
+        iunmap 0
+        iunmap -
+        iunmap =
+        let g:mappings_enabled = 1
+    endif
+endfunction
 
-inoremap ! 1
-inoremap @ 2
-inoremap # 3
-inoremap $ 4
-inoremap % 5
-inoremap ^ 6
-inoremap & 7
-inoremap * 8
-inoremap ( 9
-inoremap ) 0
-inoremap _ -
+inoremap <F9> <C-O>:call ToggleMappings()<CR>
 
 " toggle on non-printable-chars
 set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬
@@ -64,7 +72,7 @@ set autochdir
 nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
 
 " insert date
-nnoremap <f6> :r!date "+\%F" <Esc>
+nnoremap <f6> :r!date "+\%Y-\%m-\%d \%H:\%M:\%S" <Esc>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
@@ -74,6 +82,7 @@ set foldmethod=syntax
 set foldlevel=2
 nnoremap ' zR
 nnoremap " zM
+nnoremap zz zA
 nnoremap <leader><leader> za
 
 " Define a function to set the custom highlight
@@ -91,8 +100,8 @@ augroup END
 " => Text, tab, indentation
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-syntax enable
 filetype plugin indent on
+syntax enable
 set smartindent
 set autoindent
 set tabstop=4
@@ -114,24 +123,48 @@ noremap <c-down> <c-w>-
 noremap <c-left> <c-w>>
 noremap <c-right> <c-w><
 
+" tags
+set tags=./tags,tags;/
+
+" Define a shortcut to generate tags for the project
+command! -nargs=0 GenerateTags !ctags -R --exclude=.git --exclude=build
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+map <Esc>/ :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+" Alt-right/left to navigate forward/backward in the tags stack
+map <M-Left> <C-T>
+map <M-Right> <C-]>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " List plugins 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin()
 Plug 'flazz/vim-colorschemes'
+Plug 'mhinz/vim-startify'
 Plug 'dense-analysis/ale'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'liquidz/vim-iced', {'for': 'clojure'}
 Plug 'guns/vim-sexp',    {'for': 'clojure'}
 Plug 'slint-ui/vim-slint'
 Plug 'rust-lang/rust.vim'
-Plug 'mhinz/vim-startify'
-"Plug 'clojure-vim/clojure.vim'
-"Plug 'preservim/nerdtree'
+Plug 'timonv/vim-cargo'
 "Plug 'tribela/vim-transparent'
 "Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-"Plug 'ghifarit53/tokyonight-vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-surround'
+Plug 'frazrepo/vim-rainbow'
+Plug 'jiangmiao/auto-pairs'
+"Plug 'mileszs/ack.vim'
+Plug 'preservim/nerdcommenter'
+Plug 'yegappan/taglist'
+
 call plug#end()
 
 " iced-vim
@@ -139,6 +172,18 @@ set runtimepath-=$HOME/.vim
 set runtimepath-=$HOME/.vim/after
 set packpath=/tmp/vim-iced-test
 let g:iced_enable_default_key_mappings = v:true
+
+" syntax highlighting
+autocmd BufEnter *.slint :setlocal filetype=slint
+
+" Git gutter
+nmap ]c <Plug>GitGutterNextHunk
+nmap [c <Plug>GitGutterPrevHunk
+nmap <Leader>hs <Plug>GitGutterStageHunk
+nmap <Leader>hu <Plug>GitGutterUndoHunk
+
+" fzf
+map ; :Files<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colorschemes
@@ -153,9 +198,6 @@ colorscheme molokai
 "\   endif
 "
 "autocmd VimEnter *.clj :colo industry
-
-" syntax highlighting
-autocmd BufEnter *.slint :setlocal filetype=slint
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-autosave
@@ -184,12 +226,10 @@ autocmd FileType clj set autowrite
 " au BufWritePre * let b:start_time=localtime()
 
 "autocmd VimEnter * NERDTree
-"inoremap <C-a>{ {<Cr><Cr>}<Up>
 "map <silent> <F3> :NERDTreeToggle %:p:h<CR>
+"inoremap <C-a>{ {<Cr><Cr>}<Up>
 "autocmd FileType clj colorscheme industry
 
-" tokio night theme
-"set termguicolors
-"let g:tokyonight_style = 'night' " available: night, storm
-"let g:tokyonight_enable_italic = 1
-"colorscheme tokyonight
+"autocmd BufRead, BufNewFile *.s set filetype=nasm
+"escape ^[ for alt
+"let g:UltiSnipsExpandTrigger="^[/"
