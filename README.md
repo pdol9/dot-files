@@ -1,3 +1,3 @@
 # config
 
-config files for vim and bash
+config files for vim, tmux and bash
