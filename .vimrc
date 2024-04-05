@@ -1,11 +1,12 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Settings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible
 set number relativenumber
 set clipboard=unnamedplus
 set backspace=indent,eol,start
 
+set autochdir
 set updatetime=300
 set encoding=utf-8
 scriptencoding utf-8
@@ -18,9 +19,66 @@ set showcmd
 set signcolumn=no
 set path+=../inc,../include,../tests,./src,./srcs
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab, indentation
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+filetype plugin indent on
+syntax enable
+set smartindent
+set autoindent
+set tabstop=4
+set shiftwidth=4
+set noexpandtab
+set cindent
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Splits and Tabbed Files
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+noremap <c-up> <c-w>+
+noremap <c-down> <c-w>-
+noremap <c-left> <c-w>>
+noremap <c-right> <c-w><
+
+" tags
+set tags=./tags,tags;/
+
+" Define a shortcut to generate tags for the project
+command! -nargs=0 GenerateTags !ctags -R --exclude=.git --exclude=build
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+map <Esc>/ :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+" Alt-right/left to navigate forward/backward in the tags stack
+map <M-Left> <C-T>
+map <M-Right> <C-]>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Folding
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set foldmethod=syntax
+set foldlevel=2
+nnoremap ' zR
+nnoremap " zM
+nnoremap zz zA
+nnoremap <leader><leader> za
+
+" Define a function to set the custom highlight
+function! SetCustomHighlight()
+    highlight Folded ctermbg=black ctermfg=cyan guibg=#000000 guifg=#ffffff
+endfunction
+
+" Call the function when the ColorScheme event is triggered
+augroup SetCustomHighlightGroup
+    autocmd!
+    autocmd ColorScheme * call SetCustomHighlight()
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Remap Keys
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <leader><space> :nohlsearch<CR>
 inoremap __ <Esc>
 nnoremap <space> :
@@ -51,6 +109,7 @@ function! ToggleMappings()
         iunmap 6
         iunmap 7
         iunmap 8
+        iunmap 9
         iunmap 0
         iunmap -
         iunmap =
@@ -66,7 +125,6 @@ map <F2> :set invlist<CR>
 
 " terminal
 nnoremap <silent> <F4> :bel term<CR>
-set autochdir
 
 " run python script
 nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
@@ -74,71 +132,9 @@ nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
 " insert date
 nnoremap <f6> :r!date "+\%Y-\%m-\%d \%H:\%M:\%S" <Esc>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Folding
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-set foldmethod=syntax
-set foldlevel=2
-nnoremap ' zR
-nnoremap " zM
-nnoremap zz zA
-nnoremap <leader><leader> za
-
-" Define a function to set the custom highlight
-function! SetCustomHighlight()
-    highlight Folded ctermbg=black ctermfg=cyan guibg=#000000 guifg=#ffffff
-endfunction
-
-" Call the function when the ColorScheme event is triggered
-augroup SetCustomHighlightGroup
-    autocmd!
-    autocmd ColorScheme * call SetCustomHighlight()
-augroup END
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab, indentation
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-filetype plugin indent on
-syntax enable
-set smartindent
-set autoindent
-set tabstop=4
-set shiftwidth=4
-set noexpandtab
-set cindent
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Splits and Tabbed Files
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
-
-noremap <c-up> <c-w>+
-noremap <c-down> <c-w>-
-noremap <c-left> <c-w>>
-noremap <c-right> <c-w><
-
-" tags
-set tags=./tags,tags;/
-
-" Define a shortcut to generate tags for the project
-command! -nargs=0 GenerateTags !ctags -R --exclude=.git --exclude=build
-map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-map <Esc>/ :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-" Alt-right/left to navigate forward/backward in the tags stack
-map <M-Left> <C-T>
-map <M-Right> <C-]>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " List plugins 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin()
 Plug 'flazz/vim-colorschemes'
 Plug 'mhinz/vim-startify'
@@ -164,7 +160,6 @@ Plug 'jiangmiao/auto-pairs'
 "Plug 'mileszs/ack.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'yegappan/taglist'
-
 call plug#end()
 
 " iced-vim
@@ -185,11 +180,11 @@ nmap <Leader>hu <Plug>GitGutterUndoHunk
 " fzf
 map ; :Files<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colorschemes
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+colorscheme phoenix
 
-colorscheme molokai
 "autocmd VimEnter * nested
 "\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
 "\   elseif &ft ==? 'clj' | colorscheme industry |
@@ -199,19 +194,23 @@ colorscheme molokai
 "
 "autocmd VimEnter *.clj :colo industry
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => vim-autosave
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Autosave
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 autocmd FocusLost * silent! w
+command! WS :write | :suspend
+nmap <C-X><C-S> :WS<CR>
 autocmd FileType clj set autowrite
+"autocmd BufWritePre *.clj :write
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unused settings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"set autowrite							" enable if needed
-"autocmd VimLeave						" saving at exiting
+"source $VIMRUNTIME/defaults.vim
+"colorscheme molokai
+""set autowrite							" enable if needed
+""autocmd VimLeave						" saving at exiting
 
 " Save once per minute if there are changes
 " let g:autosave_seconds = 60
@@ -229,7 +228,3 @@ autocmd FileType clj set autowrite
 "map <silent> <F3> :NERDTreeToggle %:p:h<CR>
 "inoremap <C-a>{ {<Cr><Cr>}<Up>
 "autocmd FileType clj colorscheme industry
-
-"autocmd BufRead, BufNewFile *.s set filetype=nasm
-"escape ^[ for alt
-"let g:UltiSnipsExpandTrigger="^[/"
