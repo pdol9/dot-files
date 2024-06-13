@@ -83,8 +83,8 @@ nnoremap <f6> :r!date "+\%Y-\%m-\%d \%H:\%M:\%S" <Esc>
 " => Folding
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set foldmethod=syntax
-set foldlevel=2
+"set foldmethod=syntax
+"set foldlevel=2
 nnoremap ' zR
 nnoremap " zM
 nnoremap zz zA
@@ -195,7 +195,17 @@ autocmd BufEnter *.slint :setlocal filetype=slint
 " Colorschemes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-colorscheme zenburn
+"colorscheme zenburn
+
+colorscheme molokai
+autocmd VimEnter * nested
+\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
+\   elseif &ft ==? 'clj' | colorscheme industry |
+\   elseif &ft ==# 'rust' | colorscheme ron |
+\   else | colorscheme delek |
+\   endif
+
+autocmd VimEnter *.clj :colo industry
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-autosave
@@ -210,13 +220,3 @@ autocmd FileType clj set autowrite
 
 "set autowrite							" enable if needed
 "autocmd FileType clj colorscheme industry
-
-"colorscheme molokai
-"autocmd VimEnter * nested
-"\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
-"\   elseif &ft ==? 'clj' | colorscheme industry |
-"\   elseif &ft ==# 'rust' | colorscheme ron |
-"\   else | colorscheme delek |
-"\   endif
-"
-"autocmd VimEnter *.clj :colo industry

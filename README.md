@@ -1,3 +1,8 @@
 # config
 
-config files for vim, tmux and bash
+config files for:
+- vim
+- tmux
+- bash
+- git
+- ssh (keys)
