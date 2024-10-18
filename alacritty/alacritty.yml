@@ -1,0 +1,51 @@
+# https://alacritty.org/config-alacritty.html
+# version 0.12.2
+
+window:
+  # Default window size (in cells, not pixels)
+  dimensions:
+    columns: 89
+    lines: 48
+
+  # Position of the window
+  position:
+    x: 180
+    y: 400
+
+  decorations: "None"
+
+  # Allow terminal applications to change Alacritty's window title
+  dynamic_title: true
+
+  blur:
+    true
+  # Window padding
+  padding:
+    x: 10
+    y: 10
+
+  opacity: 0.90
+
+key_bindings:
+  - { key: C, mods: Alt, action: Copy }
+  - { key: V, mods: Alt, action: Paste }
+  - { key: Return, mods: Control, action: SpawnNewInstance }
+  - { key: Space, mods: Control, action: ToggleFullscreen }
+  - { key: Up, mods: Control, action: ScrollLineUp }
+  - { key: Down, mods: Control, action: ScrollLineDown }
+  - { key: A, mods: Alt, command: { program: "/bin/bash", args: ["-c", "/home/$USER/.config/alacritty/toggle_transparancy.sh"] } }
+  - { key: R, mods: Alt, command: { program: "/bin/bash", args: ["-c", "/home/$USER/.config/alacritty/resize.sh"] } }
+
+cursor:
+  style: Block
+
+scrolling:
+  history: 5000
+  multiplier: 3
+
+colors:
+  primary:
+    background: '0x1d1f21'
+    foreground: '0xc5c8c6'
+
+live_config_reload: true
