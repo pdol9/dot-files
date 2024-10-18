@@ -154,8 +154,8 @@ Plug 'guns/vim-sexp',    {'for': 'clojure'}
 Plug 'slint-ui/vim-slint'
 Plug 'rust-lang/rust.vim'
 Plug 'timonv/vim-cargo'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "Plug 'tribela/vim-transparent'
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -218,5 +218,5 @@ autocmd FileType clj set autowrite
 " Unused settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"set autowrite							" enable if needed
+"set autowrite					" enable if needed
 "autocmd FileType clj colorscheme industry

@@ -1,8 +1,9 @@
 # config
 
-config files for:
+config / setup files for:
 - vim
 - tmux
 - bash
 - git
-- ssh (keys)
+- ssh and github profiles
+- alacritty
