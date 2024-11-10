@@ -130,6 +130,7 @@ noremap <c-right> <c-w><
 
 " tags
 set tags=./tags,tags;/
+sudo apt-get install exuberant-ctags
 
 " Define a shortcut to generate tags for the project
 command! -nargs=0 GenerateTags !ctags -R --exclude=.git --exclude=build
