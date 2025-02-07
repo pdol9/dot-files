@@ -83,8 +83,8 @@ nnoremap <f6> :r!date "+\%Y-\%m-\%d \%H:\%M:\%S" <Esc>
 " => Folding
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"set foldmethod=syntax
-"set foldlevel=2
+set foldmethod=syntax
+set foldlevel=2
 nnoremap ' zR
 nnoremap " zM
 nnoremap zz zA
@@ -130,7 +130,6 @@ noremap <c-right> <c-w><
 
 " tags
 set tags=./tags,tags;/
-sudo apt-get install exuberant-ctags
 
 " Define a shortcut to generate tags for the project
 command! -nargs=0 GenerateTags !ctags -R --exclude=.git --exclude=build
@@ -145,6 +144,12 @@ map <M-Right> <C-]>
 " List plugins 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin()
 Plug 'flazz/vim-colorschemes'
 Plug 'mhinz/vim-startify'
@@ -155,8 +160,8 @@ Plug 'guns/vim-sexp',    {'for': 'clojure'}
 Plug 'slint-ui/vim-slint'
 Plug 'rust-lang/rust.vim'
 Plug 'timonv/vim-cargo'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "Plug 'tribela/vim-transparent'
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -173,7 +178,9 @@ let g:iced_enable_default_key_mappings = v:true
 let g:ale_linters = {
 \   'c': ['gcc'],
 \   'cpp': ['g++'],
+\ 	'nasm': [],
 \ }
+
 
 " Optionally, configure ALE to use GNU compilers for fixing
 let g:ale_fixers = {
@@ -191,22 +198,14 @@ let g:ale_c_parse_makefile = 1
 
 " syntax highlighting
 autocmd BufEnter *.slint :setlocal filetype=slint
+autocmd BufNewFile,BufRead *.nasm set filetype=nasm
+autocmd BufNewFile,BufRead *.s set filetype=nasm
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colorschemes
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "colorscheme zenburn
-
-colorscheme molokai
-autocmd VimEnter * nested
-\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
-\   elseif &ft ==? 'clj' | colorscheme industry |
-\   elseif &ft ==# 'rust' | colorscheme ron |
-\   else | colorscheme delek |
-\   endif
-
-autocmd VimEnter *.clj :colo industry
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-autosave
@@ -219,5 +218,15 @@ autocmd FileType clj set autowrite
 " Unused settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"set autowrite					" enable if needed
+"set autowrite							" enable if needed
 "autocmd FileType clj colorscheme industry
+
+colorscheme molokai
+autocmd VimEnter * nested
+\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
+\   elseif &ft ==? 'clj' | colorscheme industry |
+\   elseif &ft ==# 'rust' | colorscheme ron |
+\   else | colorscheme delek |
+\   endif
+
+autocmd VimEnter *.clj :colo industry
