@@ -1,4 +1,4 @@
-# config
+# config files
 
 config / setup files for:
 - vim
