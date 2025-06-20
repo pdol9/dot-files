@@ -30,6 +30,16 @@ inoremap [ []<Left>
 inoremap { {}<Left>
 inoremap " ""<Left>
 
+" Remap Page Up to Left Arrow
+nnoremap <PageUp> <Left>
+inoremap <PageUp> <Left>
+vnoremap <PageUp> <Left>
+
+" Remap Page Down to Right Arrow
+nnoremap <PageDown> <Right>
+inoremap <PageDown> <Right>
+vnoremap <PageDown> <Right>
+
 let g:mappings_enabled = 1
 
 function! ToggleMappings()
@@ -161,7 +171,7 @@ Plug 'slint-ui/vim-slint'
 Plug 'rust-lang/rust.vim'
 Plug 'timonv/vim-cargo'
 "Plug 'tribela/vim-transparent'
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -221,9 +231,9 @@ autocmd FileType clj set autowrite
 "set autowrite							" enable if needed
 "autocmd FileType clj colorscheme industry
 
-colorscheme molokai
+colorscheme mourning
 autocmd VimEnter * nested
-\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme koehler |
+\   if &ft ==# 'c' || &ft ==# 'cpp' | colorscheme mourning |
 \   elseif &ft ==? 'clj' | colorscheme industry |
 \   elseif &ft ==# 'rust' | colorscheme ron |
 \   else | colorscheme delek |
