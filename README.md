@@ -7,3 +7,5 @@ config / setup files for:
 - git
 - ssh and github profiles
 - alacritty
+- battery management
+- signing linux kernel modules
