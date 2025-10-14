@@ -161,6 +161,9 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 call plug#begin()
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'flazz/vim-colorschemes'
 Plug 'mhinz/vim-startify'
 Plug 'dense-analysis/ale'
@@ -177,6 +180,13 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins' settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" airline-vim: buffer mngr
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
 
 " iced-vim
 set runtimepath-=$HOME/.vim
